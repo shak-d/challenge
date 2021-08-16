@@ -5,7 +5,7 @@ type Coordinates = {
   longitude: number
 };
 
-const maxApiSimultaneusRequests = 5;
+const maxApiSimultaneusRequests = 2;
 
 const minLatitude = -90;
 const maxLatitude = 90;
@@ -38,11 +38,10 @@ const challenge = (randomCoordinatesAmount: number) => {
       latitude: generateRandomLatitude(),
       longitude: generateRandomLongitude()
     }
-    console.info(randomCoordinates);
     randomCoordinatesArray.push(randomCoordinates);
   }
 
-  const checkFinishedAndPrint = () => {
+  const finalizeCheckFinishedAndPrint = () => {
     returnedFetches++;
     if (returnedFetches === randomCoordinatesAmount) {
       if (earliestCoordinatesSunset)
@@ -76,7 +75,7 @@ const challenge = (randomCoordinatesAmount: number) => {
       fetchSunriseAndSunset(nextCoordinates.latitude, nextCoordinates.longitude)
         .then((result) => fetchCallback(nextCoordinates, result))
         .catch(logError)
-        .finally(checkFinishedAndPrint);
+        .finally(finalizeCheckFinishedAndPrint);
   };
 
   for (let i = 0; i < maxApiSimultaneusRequests; i++) {
@@ -85,4 +84,4 @@ const challenge = (randomCoordinatesAmount: number) => {
 
 }
 
-challenge(100);
+challenge(10);
